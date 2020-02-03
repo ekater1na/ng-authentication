@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-consr User = require('../models/user')
+const User = require('../models/user')
 const mongoose = require('mongoose');
 const db = 'mongodb://uservishwas:uservishwas@cluster0-shard-00-00-lfxp5.mongodb.net:27017,cluster0-shard-00-01-lfxp5.mongodb.net:27017,cluster0-shard-00-02-lfxp5.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority';
 
@@ -14,8 +14,8 @@ mongoose.connect(db, { useUnifiedTopology: true, useNewUrlParser: true}, err => 
 
 router.post('/register', (req, res) => {
     let userData = req.body
-    let User = new User(userData)
-    userData.save((error, registerUser) => {
+    let user = new User(userData)
+    user.save((error, registerUser) => {
         if (error) {
             console.log(error);
         } else {
@@ -24,8 +24,23 @@ router.post('/register', (req, res) => {
     })
 })
 
-router.get('/', (req, res) => {
-    res.send('From API route')
+router.post('/login', (req, res) => {
+    let userData = req.body
+
+    User.findOne({email: userData.email}, (error, user) => {
+        if (error) {
+            console.log(error);
+        } else {
+            if (!user) {
+                res.status(401).send('Invalid email')
+            } else 
+                if (user.password !== userData.password) {
+                    res.status(401).send('Invalid password')
+             } else  {
+                 res.status(200).send(user)
+             }
+        }
+    })
 });
 
 module.exports = router;
