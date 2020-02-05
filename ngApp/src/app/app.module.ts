@@ -25,7 +25,7 @@ import { AuthService } from './auth.service';
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [AuthService],
+  providers: [AuthService? Event],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
