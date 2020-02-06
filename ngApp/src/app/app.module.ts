@@ -19,7 +19,7 @@ import { TokenInterceptorService } from './token-interceptor.service';
     RegisterComponent,
     LoginComponent,
     EventsComponent,
-    SpecialEventsComponent    
+    SpecialEventsComponent
   ],
   imports: [
     BrowserModule,

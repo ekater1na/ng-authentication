@@ -10,9 +10,9 @@ import { Router } from '@angular/router';
 })
 export class SpecialEventsComponent implements OnInit {
 
-  specialEvents = []
+  specialEvents = [];
   constructor(private _eventService: EventService,
-    private _router: Router) { }
+              private _router: Router) { }
 
   ngOnInit(): void {
     this._eventService.getSpecialEvents()
@@ -21,11 +21,11 @@ export class SpecialEventsComponent implements OnInit {
         err => {
           if (err instanceof HttpErrorResponse) {
             if (err.status === 401) {
-              this._router.navigate(['./login'])
+              this._router.navigate(['./login']);
             }
           }
         }
-      )
+      );
   }
 
 }
