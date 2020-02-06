@@ -13,6 +13,23 @@ mongoose.connect(db, { useUnifiedTopology: true, useNewUrlParser: true}, err => 
     }
 });
 
+function verifyToken(req, res, next) {
+  if(!req.headers.authorization) {
+    return res.status(401).send('Unauthorized request')
+  }
+  let token = req.headers.authorization.split(' ')[1]
+  if (token === 'null') {
+    return res.status(401).send('Unauthorized request')
+  }
+  let payload = jwt.verify(token, 'secretKey')
+  if (!payload) {
+    return res.status(401).send('Unauthorized request')
+  }
+  req.userId = payload.subject
+  next()
+}
+
+
 router.post('/register', (req, res) => {
     let userData = req.body
     let user = new User(userData)
@@ -90,7 +107,7 @@ router.get('/events', (req, res) => {
       res.json(events)
 })
 
-router.get('/special', (req, res) => {
+router.get('/special', verifyToken, (req, res) => {
     let events = [
         {
           "_id": "1",
@@ -129,7 +146,7 @@ router.get('/special', (req, res) => {
           "date": "2012-04-23T18:25:43.511Z"
         }
       ]
-      res.json(events)
+    res.json(events)
 })
 
 module.exports = router;
